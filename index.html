@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kairos Proposal — for CROWLABO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --canvas:#F6F7F4;
+    --ink:#14181C;
+    --ink-soft:#4A5056;
+    --indigo:#4A55D8;
+    --teal:#00B6A6;
+    --coral:#FF6B4A;
+    --grid:#DCE0E6;
+    --white:#FFFFFF;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background:var(--canvas);
+    color:var(--ink);
+    font-family:'Noto Sans JP', sans-serif;
+    line-height:1.8;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,.en{
+    font-family:'Space Grotesk','Noto Sans JP', sans-serif;
+  }
+
+  a{text-decoration:none; color:inherit;}
+
+  .wrap{
+    max-width:1140px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  .tag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    letter-spacing:0.18em;
+    font-weight:700;
+    color:var(--indigo);
+    background:rgba(74,85,216,0.08);
+    border:1px solid rgba(74,85,216,0.25);
+    padding:6px 14px;
+    border-radius:999px;
+  }
+  .tag::before{
+    content:"";
+    width:7px;height:7px;border-radius:50%;
+    background:var(--teal);
+    display:inline-block;
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    padding:110px 0 90px;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:48px 48px;
+    background-position:center top;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    top:-120px; right:-120px;
+    width:420px;height:420px;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(0,182,166,0.25), transparent 70%);
+    pointer-events:none;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:60px;
+    align-items:center;
+  }
+  .hero-copy .tag{margin-bottom:28px;}
+  .hero h1{
+    font-size:clamp(32px,4.4vw,52px);
+    font-weight:700;
+    line-height:1.5;
+    letter-spacing:0.01em;
+    margin-bottom:26px;
+  }
+  .hero h1 .accent{
+    color:var(--indigo);
+    position:relative;
+  }
+  .hero h1 .accent2{color:var(--teal);}
+  .hero p.lead{
+    font-size:16px;
+    color:var(--ink-soft);
+    max-width:520px;
+    margin-bottom:34px;
+  }
+  .hero-foot{
+    display:flex;
+    gap:28px;
+    flex-wrap:wrap;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .hero-foot strong{
+    display:block;
+    font-size:20px;
+    color:var(--ink);
+    font-family:'Space Grotesk';
+  }
+
+  /* mockup */
+  .mockup{
+    position:relative;
+    background:var(--white);
+    border-radius:14px;
+    border:1px solid var(--grid);
+    box-shadow:0 30px 60px -20px rgba(20,24,28,0.25);
+    padding:0;
+    transform:rotate(-1.2deg);
+  }
+  .mockup-bar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 16px;
+    border-bottom:1px solid var(--grid);
+  }
+  .mockup-bar span{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--grid);
+  }
+  .mockup-bar span:nth-child(1){background:var(--coral);}
+  .mockup-bar span:nth-child(2){background:#F2C94C;}
+  .mockup-bar span:nth-child(3){background:var(--teal);}
+  .mockup-bar small{
+    margin-left:auto;
+    font-size:11px;
+    color:#A7ADB5;
+    font-family:'Space Grotesk';
+    letter-spacing:0.05em;
+  }
+  .mockup-body{
+    padding:22px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+  }
+  .board{
+    border-radius:8px;
+    border:1px solid var(--grid);
+    padding:14px;
+    background:var(--canvas);
+    position:relative;
+    min-height:92px;
+  }
+  .board .b-label{
+    font-size:10px;
+    letter-spacing:0.08em;
+    color:#A7ADB5;
+    font-family:'Space Grotesk';
+    position:absolute;
+    bottom:8px; left:10px;
+  }
+  .board.i{background:linear-gradient(135deg, rgba(74,85,216,0.14), rgba(74,85,216,0.03));}
+  .board.t{background:linear-gradient(135deg, rgba(0,182,166,0.16), rgba(0,182,166,0.03));}
+  .board.c{background:linear-gradient(135deg, rgba(255,107,74,0.16), rgba(255,107,74,0.03));}
+  .board.full{grid-column:1/3;}
+  .board .line{
+    height:7px;
+    border-radius:4px;
+    background:rgba(20,24,28,0.08);
+    margin-bottom:8px;
+  }
+  .board .line.short{width:55%;}
+
+  .badge-float{
+    position:absolute;
+    font-family:'Space Grotesk';
+    font-size:12px;
+    font-weight:700;
+    padding:6px 12px;
+    border-radius:8px;
+    box-shadow:0 10px 20px -8px rgba(20,24,28,0.3);
+    background:var(--white);
+    border:1px solid var(--grid);
+  }
+  .badge-float.one{top:-18px; right:40px; color:var(--indigo); transform:rotate(4deg);}
+  .badge-float.two{bottom:-16px; left:-18px; color:var(--teal); transform:rotate(-5deg);}
+
+  /* ===== SECTION BASE ===== */
+  section{padding:90px 0;}
+  .section-head{
+    max-width:680px;
+    margin-bottom:56px;
+  }
+  .section-head .tag{margin-bottom:18px;}
+  .section-head h2{
+    font-size:clamp(26px,3.2vw,36px);
+    font-weight:700;
+    line-height:1.5;
+    margin-bottom:18px;
+  }
+  .section-head p{
+    color:var(--ink-soft);
+    font-size:15px;
+  }
+
+  /* ===== UNDERSTANDING ===== */
+  .understand{
+    background:var(--ink);
+    color:#EDEFF1;
+  }
+  .understand .tag{
+    background:rgba(255,255,255,0.08);
+    border-color:rgba(255,255,255,0.25);
+    color:#9FE8E0;
+  }
+  .understand .tag::before{background:var(--coral);}
+  .understand .section-head p{color:#B7BBC1;}
+  .understand-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+  }
+  .u-card{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:12px;
+    padding:24px 26px;
+  }
+  .u-card .num{
+    font-family:'Space Grotesk';
+    font-size:13px;
+    color:var(--teal);
+    letter-spacing:0.1em;
+    margin-bottom:10px;
+    display:block;
+  }
+  .u-card p{color:#C9CCD1; font-size:14.5px;}
+  .u-card strong{
+    display:block;
+    font-size:16.5px;
+    margin-bottom:8px;
+    color:#fff;
+    font-weight:500;
+  }
+
+  /* ===== VALUE ===== */
+  .value-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+  }
+  .v-card{
+    background:var(--white);
+    border:1px solid var(--grid);
+    border-radius:14px;
+    padding:30px 26px;
+    position:relative;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .v-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 24px 40px -20px rgba(20,24,28,0.25);
+  }
+  .v-card .dot{
+    width:38px;height:38px;
+    border-radius:10px;
+    margin-bottom:18px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk';
+    font-weight:700;
+    font-size:14px;
+    color:#fff;
+  }
+  .v-card:nth-child(1) .dot{background:var(--indigo);}
+  .v-card:nth-child(2) .dot{background:var(--teal);}
+  .v-card:nth-child(3) .dot{background:var(--coral);}
+  .v-card:nth-child(4) .dot{background:var(--indigo);}
+  .v-card:nth-child(5) .dot{background:var(--teal);}
+  .v-card h3{font-size:17.5px; margin-bottom:10px; font-weight:500;}
+  .v-card p{font-size:14px; color:var(--ink-soft);}
+  .value-grid .v-card:nth-child(4),
+  .value-grid .v-card:nth-child(5){grid-column:span 1;}
+
+  /* ===== PROCESS ===== */
+  .process{background:#EFF1EC;}
+  .timeline{
+    position:relative;
+    padding-left:40px;
+  }
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left:10px; top:6px; bottom:6px;
+    width:2px;
+    background:repeating-linear-gradient(to bottom, var(--indigo) 0 6px, transparent 6px 12px);
+  }
+  .step{
+    position:relative;
+    padding-bottom:42px;
+  }
+  .step:last-child{padding-bottom:0;}
+  .step::before{
+    content:"";
+    position:absolute;
+    left:-34px; top:4px;
+    width:14px;height:14px;
+    border-radius:50%;
+    background:var(--white);
+    border:3px solid var(--teal);
+  }
+  .step .s-num{
+    font-family:'Space Grotesk';
+    font-size:12px;
+    letter-spacing:0.12em;
+    color:var(--indigo);
+    font-weight:700;
+    margin-bottom:6px;
+    display:block;
+  }
+  .step h3{font-size:18px; font-weight:500; margin-bottom:8px;}
+  .step p{font-size:14.5px; color:var(--ink-soft); max-width:580px;}
+
+  /* ===== CLOSING ===== */
+  .closing{
+    background:
+      radial-gradient(circle at 15% 20%, rgba(0,182,166,0.18), transparent 45%),
+      radial-gradient(circle at 85% 80%, rgba(74,85,216,0.22), transparent 45%),
+      var(--ink);
+    color:#fff;
+    text-align:center;
+    padding:110px 0;
+  }
+  .closing .tag{
+    background:rgba(255,255,255,0.08);
+    border-color:rgba(255,255,255,0.25);
+    color:#9FE8E0;
+    margin:0 auto 24px;
+  }
+  .closing h2{
+    font-size:clamp(28px,4vw,42px);
+    font-weight:700;
+    margin-bottom:20px;
+    line-height:1.5;
+  }
+  .closing p{
+    color:#C9CCD1;
+    max-width:560px;
+    margin:0 auto 38px;
+    font-size:15.5px;
+  }
+  .cta-group{
+    display:flex;
+    gap:16px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:16px 32px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:0.02em;
+  }
+  .btn-primary{
+    background:linear-gradient(120deg, var(--indigo), var(--teal));
+    color:#fff;
+    box-shadow:0 20px 40px -14px rgba(0,182,166,0.5);
+  }
+  .btn-outline{
+    border:1px solid rgba(255,255,255,0.3);
+    color:#fff;
+  }
+  .closing-meta{
+    margin-top:48px;
+    font-size:12.5px;
+    color:#8D9298;
+    font-family:'Space Grotesk';
+    letter-spacing:0.08em;
+  }
+
+  footer{
+    background:var(--ink);
+    color:#777D83;
+    text-align:center;
+    padding:26px 0 36px;
+    font-size:12.5px;
+    letter-spacing:0.04em;
+    font-family:'Space Grotesk';
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;}
+    .mockup{transform:none; margin-top:20px;}
+    .understand-grid{grid-template-columns:1fr;}
+    .value-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:560px){
+    .hero{padding:80px 0 60px;}
+    section{padding:64px 0;}
+    .value-grid{grid-template-columns:1fr;}
+    .hero-foot{gap:18px;}
+    .mockup-body{grid-template-columns:1fr 1fr;}
+    .timeline{padding-left:30px;}
+    .step::before{left:-27px;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="tag">KAIROS PROPOSAL / FOR CROWLABO</span>
+        <h1>
+          一枚のアートボードに、<br>
+          <span class="accent">事業のスピード</span>を描く。<br>
+          <span class="accent2">月35万円</span>で、御社専属の手を。
+        </h1>
+        <p class="lead">
+          「案件多数、デザイナー急募」——その一行の裏に、止まりかけているプロジェクトがあることを私たちは知っています。
+          Kairosは、Figmaでの実装前提設計とUI/UXの両輪を扱えるチームとして、CROWLABO様の制作ラインに入り込む提案をいたします。
+        </p>
+        <div class="hero-foot">
+          <div><strong>Figma</strong>設計〜納品まで一気通貫</div>
+          <div><strong>UI/UX</strong>導線設計も対応可</div>
+          <div><strong>継続稼働</strong>ボリューム変動に柔軟対応</div>
+        </div>
+      </div>
+
+      <div class="mockup">
+        <span class="badge-float one">UI / UX</span>
+        <div class="mockup-bar">
+          <span></span><span></span><span></span>
+          <small>CROWLABO_WORKSPACE.fig</small>
+        </div>
+        <div class="mockup-body">
+          <div class="board i">
+            <div class="line"></div><div class="line short"></div>
+            <span class="b-label">LP DESIGN</span>
+          </div>
+          <div class="board t">
+            <div class="line"></div><div class="line short"></div>
+            <span class="b-label">MOBILE APP</span>
+          </div>
+          <div class="board c full">
+            <div class="line"></div><div class="line short"></div>
+            <span class="b-label">UI KIT / COMPONENT LIBRARY</span>
+          </div>
+        </div>
+        <span class="badge-float two">月額契約</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== UNDERSTANDING ===== -->
+  <section class="understand">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">WHAT WE SEE</span>
+        <h2>募集文の数行から、現場の温度が伝わってきます。</h2>
+        <p>
+          「案件多い」「月により変わる」「ポートフォリオ提示」——これは単なる人員補充ではなく、
+          制作体制そのものをスケールさせたいというサインだと受け止めています。
+        </p>
+      </div>
+      <div class="understand-grid">
+        <div class="u-card">
+          <span class="num">ISSUE / 01</span>
+          <strong>案件増加にデザイン供給が追いついていない</strong>
+          <p>受注は増えているが、Figmaで手を動かせる人材が恒常的に不足している状態。属人化の解消が急務です。</p>
+        </div>
+        <div class="u-card">
+          <span class="num">ISSUE / 02</span>
+          <strong>ボリュームの波に耐えられる体制がない</strong>
+          <p>「月により変わる」案件量に対して、固定の外部パートナーが波を吸収できる仕組みが求められています。</p>
+        </div>
+        <div class="u-card">
+          <span class="num">ISSUE / 03</span>
+          <strong>見た目だけでなく、使われる設計が必要</strong>
+          <p>UI/UXが得意な人材を求める記述から、デザインの意思決定根拠まで扱えるパートナーを探していると読み取りました。</p>
+        </div>
+        <div class="u-card">
+          <span class="num">ISSUE / 04</span>
+          <strong>信頼できる継続関係を前提にしている</strong>
+          <p>「継続あり」の一言。単発納品ではなく、長く任せられる相手かどうかを見極めたいという意図が見えます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== VALUE ===== -->
+  <section class="value">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">WHAT KAIROS BRINGS</span>
+        <h2>Kairosがチームに加わることで変わること</h2>
+        <p>単なる「制作が早い人」ではなく、御社の制作ラインの一部として機能するパートナーを目指します。</p>
+      </div>
+      <div class="value-grid">
+        <div class="v-card">
+          <div class="dot">01</div>
+          <h3>Figma実装前提の設計力</h3>
+          <p>コンポーネント設計・オートレイアウト・バリアブルを駆使し、開発に渡した後も崩れない構造でデザインします。</p>
+        </div>
+        <div class="v-card">
+          <div class="dot">02</div>
+          <h3>UI/UXの両輪対応</h3>
+          <p>見た目の設計だけでなく、情報設計・導線設計・ユーザーテストの視点から画面の意味を組み立てます。</p>
+        </div>
+        <div class="v-card">
+          <div class="dot">03</div>
+          <h3>波に合わせた稼働調整</h3>
+          <p>繁忙期は複数案件を並走、閑散期は最小稼働で待機——「月により変わる」ボリュームに合わせて体制を伸縮できます。</p>
+        </div>
+        <div class="v-card">
+          <div class="dot">04</div>
+          <h3>チーム内での動きやすさ</h3>
+          <p>個人のフリーランス起用で起きがちな属人化リスクを、Kairosという組織でバックアップし継続性を担保します。</p>
+        </div>
+        <div class="v-card">
+          <div class="dot">05</div>
+          <h3>低コストでの体制構築</h3>
+          <p>月額35万円という予算レンジの中で、デザイン〜軽微な実装連携まで含めた動ける座組みをご用意します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROCESS ===== -->
+  <section class="process">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="tag">HOW WE START</span>
+        <h2>ご依頼から稼働開始までの流れ</h2>
+        <p>応募要件に沿って、まずは軽いコミュニケーションからご案内します。</p>
+      </div>
+      <div class="timeline">
+        <div class="step">
+          <span class="s-num">STEP 01</span>
+          <h3>自己紹介・ポートフォリオの共有</h3>
+          <p>Kairosチームの実績・得意領域・Figma運用実例をまとめてご提示します。あわせて簡単なヒアリングシートもお送りします。</p>
+        </div>
+        <div class="step">
+          <span class="s-num">STEP 02</span>
+          <h3>トライアル案件でのすり合わせ</h3>
+          <p>小規模な1案件をお試しでお任せいただき、デザインの質・コミュニケーション速度・修正対応をご確認いただきます。</p>
+        </div>
+        <div class="step">
+          <span class="s-num">STEP 03</span>
+          <h3>月額契約・稼働開始</h3>
+          <p>月35万円の予算レンジを前提に、稼働ボリュームの目安をすり合わせたうえで継続契約をスタートします。</p>
+        </div>
+        <div class="step">
+          <span class="s-num">STEP 04</span>
+          <h3>運用・スケール</h3>
+          <p>案件数の増減に合わせて稼働を調整しながら、長期的なデザインパートナーとして伴走します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CLOSING ===== -->
+  <section class="closing">
+    <div class="wrap">
+      <span class="tag">LET'S TALK</span>
+      <h2>まずは、御社のアートボードを<br>一緒に覗かせてください。</h2>
+      <p>
+        ポートフォリオと簡単な自己紹介は、いつでもご用意できます。
+        まずはお気軽にメッセージください。CROWLABO様の制作体制に、Kairosという選択肢を。
+      </p>
+      <div class="cta-group">
+        <a href="#" class="btn btn-primary">今すぐ相談してみる →</a>
+        <a href="#" class="btn btn-outline">ポートフォリオを見る</a>
+      </div>
+      <div class="closing-meta">KAIROS / WEB &amp; SYSTEM DEVELOPMENT TEAM</div>
+    </div>
+  </section>
+
+  <footer>
+    © KAIROS — PROPOSAL FOR CROWLABO
+  </footer>
+
+</body>
+</html>
